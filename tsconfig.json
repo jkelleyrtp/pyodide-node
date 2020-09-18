@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ESNEXT" /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019' or 'ESNEXT'. */,
+    "outDir": "./src",
+    "module": "commonjs",
+    "declaration": true /* Generates corresponding '.d.ts' file. */,
+    "declarationMap": false /* Generates a sourcemap for each corresponding '.d.ts' file. */,
+    "sourceMap": false /* Generates corresponding '.map' file. */,
+    "skipLibCheck": true,
+    /* Strict Type-Checking Options */
+    "strict": true /* Enable all strict type-checking options. */,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "allowJs": true,
+    "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
+  },
+  "lib": ["es2018"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts"],
+  "exclude": ["node_modules", "**/*.spec.ts", "dist"]
+}
