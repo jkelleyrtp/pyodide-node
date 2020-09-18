@@ -20,7 +20,7 @@ export class PyodideLoader<T> {
   }
 
   // Download the webassembly module and then create a usable pyodide instance
-  async loadPython(): Promise<{ pyodide: Pyodide<{}> }> {
+  async loadPython(): Promise<Pyodide<{}>> {
     /**
      * [1] Download the webassembly and instantiate the module
      * [2] Build the support methods
@@ -107,7 +107,9 @@ export class PyodideLoader<T> {
         //@ts-ignore
         pyodideInstance.then((a) => {
           //@ts-ignore
-          resolvePyodide({ pyodide: pyodideInstance });
+          pyodideInstance.then = undefined;
+
+          resolvePyodide(pyodideInstance);
           //@ts-ignore
           process.pyodide = pythonModule;
 

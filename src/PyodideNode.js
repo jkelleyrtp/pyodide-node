@@ -11,13 +11,12 @@ const node_fetch_1 = __importDefault(require("node-fetch"));
  * from a custom external pyodide
  */
 class PyodideLoader {
-    constructor(baseUrl = path_1.default.join(__dirname), globalVar) {
+    constructor(baseUrl = path_1.default.join(__dirname, "assets")) {
         this.loadedPackages = new Set();
         this.pyodide = null;
         this.baseUrl = baseUrl;
         this.wasmUrl = `${baseUrl}/pyodide.asm.wasm`;
         this.packagesUrl = `${baseUrl}/packages`;
-        this.globalVar = globalVar;
     }
     // Download the webassembly module and then create a usable pyodide instance
     async loadPython() {
@@ -44,7 +43,7 @@ class PyodideLoader {
             pythonModule.noImageDecoding = true;
             pythonModule.noAudioDecoding = true;
             pythonModule.noWasmDecoding = true;
-            pythonModule.global = this.globalVar;
+            pythonModule.global = process;
             pythonModule.filePackagePrefixURL = this.baseUrl + "/";
             pythonModule.checkABI = checkABI;
             pythonModule.locateFile = locateFile;
@@ -69,6 +68,9 @@ class PyodideLoader {
             pythonModule.postRun = () => {
                 pyodideInstance.filePackagePrefixURL = this.packagesUrl;
                 pyodideInstance.locateFile = (path) => `${this.packagesUrl}/${path}`;
+                pyodideInstance.runPython(`import sys; sys.setrecursionlimit(int(${500}))`);
+                //@ts-ignore
+                pyodideInstance.globals = pyodideInstance.runPython('import sys\nsys.modules["__main__"]');
                 // Finally, assign some methods that pyodide will use to do things like
                 // autocomplete and package loading
                 const loadPackage = buildLoadPackage(this.packagesUrl, this.loadedPackages, availablePackages, pyodideInstance);
@@ -79,7 +81,8 @@ class PyodideLoader {
                 //@ts-ignore
                 pyodideInstance.then((a) => {
                     //@ts-ignore
-                    resolvePyodide({ py: pyodideInstance });
+                    pyodideInstance.then = undefined;
+                    resolvePyodide(pyodideInstance);
                     //@ts-ignore
                     process.pyodide = pythonModule;
                     this.pyodide = pyodideInstance;

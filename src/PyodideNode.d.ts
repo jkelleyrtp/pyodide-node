@@ -6,13 +6,10 @@ export declare class PyodideLoader<T> {
     baseUrl: string;
     wasmUrl: string;
     packagesUrl: string;
-    globalVar: any;
     loadedPackages: Set<string>;
     pyodide: Pyodide<T> | null;
-    constructor(baseUrl: string | undefined, globalVar: any);
-    loadPython(): Promise<{
-        pyodide: Pyodide<{}>;
-    }>;
+    constructor(baseUrl?: string);
+    loadPython(): Promise<Pyodide<{}>>;
 }
 export declare type Pyodide<T> = PyodidePublic & PyodideModule & {
     globals: T;
