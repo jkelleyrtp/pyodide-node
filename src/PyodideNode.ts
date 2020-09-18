@@ -14,7 +14,7 @@ export class PyodideLoader<T> {
   loadedPackages = new Set<string>();
   pyodide: Pyodide<T> | null = null;
 
-  constructor(baseUrl = path.join(__dirname), globalVar: any) {
+  constructor(baseUrl = path.join(__dirname, "assets"), globalVar: any) {
     this.baseUrl = baseUrl;
     this.wasmUrl = `${baseUrl}/pyodide.asm.wasm`;
     this.packagesUrl = `${baseUrl}/packages`;
