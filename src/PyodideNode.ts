@@ -10,15 +10,13 @@ export class PyodideLoader<T> {
   baseUrl: string;
   wasmUrl: string;
   packagesUrl: string;
-  globalVar: any;
   loadedPackages = new Set<string>();
   pyodide: Pyodide<T> | null = null;
 
-  constructor(baseUrl = path.join(__dirname, "assets"), globalVar: any) {
+  constructor(baseUrl = path.join(__dirname, "assets")) {
     this.baseUrl = baseUrl;
     this.wasmUrl = `${baseUrl}/pyodide.asm.wasm`;
     this.packagesUrl = `${baseUrl}/packages`;
-    this.globalVar = globalVar;
   }
 
   // Download the webassembly module and then create a usable pyodide instance
@@ -53,7 +51,7 @@ export class PyodideLoader<T> {
       pythonModule.noImageDecoding = true;
       pythonModule.noAudioDecoding = true;
       pythonModule.noWasmDecoding = true;
-      pythonModule.global = this.globalVar;
+      pythonModule.global = process;
       pythonModule.filePackagePrefixURL = this.baseUrl + "/";
       pythonModule.checkABI = checkABI;
       pythonModule.locateFile = locateFile;
