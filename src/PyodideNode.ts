@@ -82,6 +82,13 @@ export class PyodideLoader<T> {
         pyodideInstance.filePackagePrefixURL = this.packagesUrl;
         pyodideInstance.locateFile = (path) => `${this.packagesUrl}/${path}`;
 
+        pyodideInstance.runPython(
+          `import sys; sys.setrecursionlimit(int(${500}))`
+        );
+        //@ts-ignore
+        pyodideInstance.globals = pyodideInstance.runPython(
+          'import sys\nsys.modules["__main__"]'
+        );
         // Finally, assign some methods that pyodide will use to do things like
         // autocomplete and package loading
         const loadPackage = buildLoadPackage(
@@ -90,15 +97,17 @@ export class PyodideLoader<T> {
           availablePackages,
           pyodideInstance
         );
+
         ///@ts-ignore
         pyodideInstance.loadPackage = loadPackage;
+
         //@ts-ignore
         global.pyodide = { _module: pythonModule };
 
         //@ts-ignore
         pyodideInstance.then((a) => {
           //@ts-ignore
-          resolvePyodide({ py: pyodideInstance });
+          resolvePyodide({ pyodide: pyodideInstance });
           //@ts-ignore
           process.pyodide = pythonModule;
 
