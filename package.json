@@ -7,17 +7,20 @@
     "node": ">=8.11"
   },
   "scripts": {
+    "build": "tsc",
     "start": "node index.js",
     "test": "mocha src/test/PyodideNode.test.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^10.9.4",
+    "@types/node": "^10.17.35",
     "expect.js": "^0.3.1",
     "mocha": "^5.2.0"
   },
   "dependencies": {
-    "isomorphic-fetch": "^2.2.1"
+    "@types/node-fetch": "^2.5.7",
+    "isomorphic-fetch": "^2.2.1",
+    "node-fetch": "^2.6.1"
   }
 }
